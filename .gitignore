@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.env*
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+src/services/flex_n_earn/images/assets/*

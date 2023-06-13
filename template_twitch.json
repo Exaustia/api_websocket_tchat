@@ -1,0 +1,43 @@
+{
+    "id": "2ba05035-c79f-489b-aaba-8c594ec38bf9",
+    "deletedAt": null,
+    "sentAt": "2023-05-11T09:49:18.671547267Z",
+    "content": {
+      "text": "Si tu vas la visiter t'auras la réponse Kappa",
+      "fragments": [
+        {
+          "text": "Si tu vas la visiter t'auras la réponse ",
+          "content": null,
+          "__typename": "MessageFragment"
+        },
+        {
+          "text": "Kappa",
+          "content": {
+            "emoteID": "25",
+            "setID": "0",
+            "token": "Kappa",
+            "__typename": "Emote"
+          },
+          "__typename": "MessageFragment"
+        }
+      ],
+      "__typename": "MessageContent"
+    },
+    "parentMessage": null,
+    "sender": {
+      "id": "88905336",
+      "login": "ilsongoku",
+      "chatColor": "#FFFF00",
+      "displayName": "IlSonGoku",
+      "__typename": "User"
+    },
+    "senderBadges": [
+      {
+        "setID": "bits-leader",
+        "version": "3",
+        "id": "Yml0cy1sZWFkZXI7Mzs=",
+        "__typename": "Badge"
+      }
+    ],
+    "__typename": "Message"
+  },
