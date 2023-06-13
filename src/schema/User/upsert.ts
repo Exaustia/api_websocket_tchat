@@ -1,4 +1,3 @@
-import { create } from 'lodash';
 import prismaInstance from '../../utils/prisma';
 
 const prisma = prismaInstance();

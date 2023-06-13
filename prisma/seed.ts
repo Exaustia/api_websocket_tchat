@@ -3,9 +3,9 @@ import prismaInstance from '../src/utils/prisma';
 const prisma = prismaInstance();
 
 const main = async () => {
-	prisma.room.create({
+	await prisma.room.create({
 		data: {
-			name: 'test',
+			name: 'live',
 		},
 	});
 };

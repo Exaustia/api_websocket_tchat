@@ -1,5 +1,7 @@
 import * as express from 'express';
 import prismaInstance from '../../utils/prisma';
+import { getRoomByName } from '../../schema/Room/queries';
+import { Room } from '@prisma/client';
 
 const prisma = prismaInstance();
 
@@ -17,7 +19,7 @@ export default async ({ app }: { app: express.Application }) => {
 			const messages = await prisma.message.findMany({
 				where: {
 					room: {
-						name: id,
+						id: id,
 					},
 				},
 				take: 10,
@@ -28,15 +30,6 @@ export default async ({ app }: { app: express.Application }) => {
 					user: true,
 				},
 			});
-
-			type Message = {
-				username: string;
-				content: string;
-				from: 'server' | 'user' | 'bot';
-				provider: 'eth' | 'solana';
-				isSub: boolean;
-				usernameColor: string;
-			};
 
 			const messagesWithUser = messages.map((message) => {
 				return {
@@ -54,6 +47,15 @@ export default async ({ app }: { app: express.Application }) => {
 		} catch (err) {
 			console.error(err);
 			return res.status(500).json({ message: 'Internal server error' });
+		}
+	});
+
+	app.get('/room/:id', async (req, res) => {
+		try {
+			const room = (await getRoomByName(req.params.id)) as Room;
+			return res.status(200).json({ room, error: null });
+		} catch (err) {
+			return res.status(500).json({ error: 'Cannot find the room' });
 		}
 	});
 };
