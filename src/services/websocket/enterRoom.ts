@@ -1,12 +1,9 @@
-import aws from 'aws-sdk';
 import prismaInstance from '../../utils/prisma';
+import { apiGatewayManagementApi } from '../../utils/awsApi';
 
 const prisma = prismaInstance();
 
-const agm = new aws.ApiGatewayManagementApi({
-	endpoint: '7b71b72exg.execute-api.us-east-1.amazonaws.com/dev',
-	region: 'us-east-1',
-});
+const agm = apiGatewayManagementApi();
 
 export const enterRoom = async ({
 	userId,
@@ -18,6 +15,7 @@ export const enterRoom = async ({
 	connectionId: string;
 }) => {
 	try {
+		console.log('icii');
 		if (userId) {
 			await prisma.userSession.create({
 				data: {
@@ -66,6 +64,7 @@ export const enterRoom = async ({
 
 		return true;
 	} catch (err) {
+		console.log(err);
 		throw new Error('Error on enter room');
 	}
 };

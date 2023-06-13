@@ -1,13 +1,8 @@
-import aws from 'aws-sdk';
-
 import prismaInstance from '../../utils/prisma';
 import { disconnectUser } from './disconnect';
+import { apiGatewayManagementApi } from '../../utils/awsApi';
 
-const agm = new aws.ApiGatewayManagementApi({
-	endpoint: '7b71b72exg.execute-api.us-east-1.amazonaws.com/dev',
-	region: 'us-east-1',
-});
-
+const agm = apiGatewayManagementApi();
 const prisma = prismaInstance();
 
 interface sendMessageProps {
