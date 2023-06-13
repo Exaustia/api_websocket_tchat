@@ -1,0 +1,104 @@
+import aws from 'aws-sdk';
+
+import prismaInstance from '../../utils/prisma';
+import { disconnectUser } from './disconnect';
+
+const agm = new aws.ApiGatewayManagementApi({
+	endpoint: '7b71b72exg.execute-api.us-east-1.amazonaws.com/dev',
+	region: 'us-east-1',
+});
+
+const prisma = prismaInstance();
+
+interface sendMessageProps {
+	connectionId: string;
+	roomId: string;
+	message: string;
+}
+export const sendMessage = async ({ connectionId, roomId, message }: sendMessageProps) => {
+	try {
+		const userConnectionId = connectionId;
+		const userWhoSendTheMessage = await prisma.userSession.findUnique({
+			where: {
+				websocketId: userConnectionId,
+			},
+			include: {
+				user: true,
+			},
+		});
+
+		if (!userWhoSendTheMessage || !userWhoSendTheMessage.user || !userWhoSendTheMessage.user.id) {
+			throw new Error('User not found');
+		}
+
+		const usersConnectedToTheRoom = await prisma.room.findUnique({
+			where: {
+				id: roomId,
+			},
+			include: {
+				sessions: {
+					where: {
+						disconnectedAt: null,
+						NOT: {
+							websocketId: connectionId,
+						},
+					},
+				},
+			},
+		});
+
+		if (!usersConnectedToTheRoom) {
+			throw new Error('Room not found');
+		}
+
+		await prisma.message.create({
+			data: {
+				content: message,
+				user: {
+					connect: {
+						id: userWhoSendTheMessage.user.id,
+					},
+				},
+				room: {
+					connect: {
+						id: roomId,
+					},
+				},
+			},
+		});
+
+		const promiseMsg = usersConnectedToTheRoom.sessions.map(async (u) => {
+			try {
+				if (!userWhoSendTheMessage.user) return;
+				await agm
+					.postToConnection({
+						ConnectionId: u.websocketId,
+						Data: Buffer.from(
+							JSON.stringify({
+								message: message,
+								action: 'publicMessage',
+								username: userWhoSendTheMessage.user.username,
+								from: 'client',
+								provider: 'eth',
+								isSub: false,
+								usernameColor: userWhoSendTheMessage?.user?.color,
+							}),
+						),
+					})
+					.promise();
+			} catch (err: any) {
+				if (err.statusCode === 410) {
+					console.log('La connexion est inactive ou a expiré.');
+					await disconnectUser(u.websocketId);
+				} else {
+					console.error("Erreur lors de l'envoi de la requête:", err);
+				}
+			}
+		});
+
+		return await Promise.all(promiseMsg);
+	} catch (err) {
+		console.log(err);
+		throw new Error('Error on send message');
+	}
+};
