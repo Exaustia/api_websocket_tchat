@@ -25,3 +25,11 @@ export const getUserByTwitterId = async (twitterId: string) => {
 		},
 	});
 };
+
+export const getUserByUsername = async (username: string) => {
+	return await prisma.user.findFirst({
+		where: {
+			username,
+		},
+	});
+};
