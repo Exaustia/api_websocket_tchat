@@ -6,6 +6,7 @@ import login from './login';
 import user from './user';
 import room from './room';
 import ws from './ws';
+import callback from './callback';
 
 export default async ({ app }: { app: express.Express }) => {
 	app.get('/', (_, res) => {
@@ -17,6 +18,7 @@ export default async ({ app }: { app: express.Express }) => {
 	await user({ app });
 	await room({ app });
 	await ws({ app });
+	await callback({ app });
 
 	console.log('Express routes Intialized');
 };

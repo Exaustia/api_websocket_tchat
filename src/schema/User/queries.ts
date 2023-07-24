@@ -9,3 +9,19 @@ export const getUserById = async (id: string) => {
 		},
 	});
 };
+
+export const getUserByDiscordId = async (discordId: string) => {
+	return await prisma.user.findFirst({
+		where: {
+			discordId,
+		},
+	});
+};
+
+export const getUserByTwitterId = async (twitterId: string) => {
+	return await prisma.user.findFirst({
+		where: {
+			twitterId,
+		},
+	});
+};

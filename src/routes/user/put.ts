@@ -8,11 +8,22 @@ export default async ({ app }: { app: express.Application }) => {
 		authentification,
 		async (req: express.Request, res: express.Response) => {
 			try {
-				await updateUsernameAndColorForUser(req.userId, req.body.username, req.body.color);
-				res.status(200).send('User updated');
-			} catch (err) {
-				console.log(err);
-				res.status(500).send('Error updating user');
+				await updateUsernameAndColorForUser(
+					req.userId,
+					req.body.username,
+					req.body.description,
+					req.body.color,
+				);
+				return res.status(200).json({
+					success: true,
+				});
+			} catch (e: any) {
+				const isMessageExists = Object.prototype.hasOwnProperty.call(e, 'message');
+				const message = isMessageExists ? e.message : 'Error while confirming transaction';
+				return res.status(200).json({
+					success: false,
+					error: message,
+				});
 			}
 		},
 	);

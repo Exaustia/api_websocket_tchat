@@ -15,6 +15,11 @@ model User {
   solanaWallet    String?           @unique @db.VarChar(256)
   ethWallet       String?           @unique @db.VarChar(256)
   picture         String?           @db.VarChar(256)
+  discordName     String?           @unique
+  description     String?           @db.VarChar(256)
+  discordId       String?           @unique
+  twitterName     String?           @unique
+  twitterId       String?           @unique
   color           String            @default("#000000")
   defaultIcon     String?
   defaultProvider String?           @default("eth")
