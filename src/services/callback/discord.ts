@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { getUserByDiscordId, getUserById } from '../../schema/User/queries';
+import { getUserByDiscordId } from '../../schema/User/queries';
 import { removeDiscordDataByUserId, updateDiscordDataByDiscordId } from '../../schema/User/update';
 
 const discordCallback = async ({ code, userId }: { code: string; userId: string }) => {
 	try {
-		const currentUser = await getUserById(userId);
 		const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 		const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 		const URL = process.env.API_URL || 'http://localhost:8080';

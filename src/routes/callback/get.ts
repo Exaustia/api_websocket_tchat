@@ -7,17 +7,18 @@ import twitterCallback from '../../services/callback/twitter';
 export default async ({ app }: { app: express.Application }) => {
 	app.get('/callback/discord', async (req, res) => {
 		try {
-			if (!req.query.code) return res.redirect('http://localhost:3000/profile?error=noCode');
-			if (!req.query.state) return res.redirect('http://localhost:3000/profile?error=noUserId');
+			const URL = process.env.FRONT_URL || 'http://localhost:8080';
+			if (!req.query.code) return res.redirect(URL + '/profile?error=noCode');
+			if (!req.query.state) return res.redirect(URL + '/profile?error=noUserId');
 			const result = await discordCallback({
 				code: req.query.code as string,
 				userId: req.query.state as string,
 			});
-			return res.redirect('http://localhost:3000/profile');
+			return res.redirect(URL + '/profile');
 		} catch (e: any) {
 			const isMessageExists = Object.prototype.hasOwnProperty.call(e, 'message');
 			const message = isMessageExists ? e.message : 'Error while confirming transaction';
-			return res.redirect(`http://localhost:3000/profile?error=${message}`);
+			return res.redirect(URL + `/profile?error=${message}`);
 		}
 	});
 
@@ -31,17 +32,18 @@ export default async ({ app }: { app: express.Application }) => {
 	});
 	app.get('/callback/twitter', async (req, res) => {
 		try {
-			if (!req.query.code) return res.redirect('http://localhost:3000/profile?error=noCode');
-			if (!req.query.state) return res.redirect('http://localhost:3000/profile?error=noUserId');
+			const URL = process.env.FRONT_URL || 'http://localhost:8080';
+			if (!req.query.code) return res.redirect(URL + '/profile?error=noCode');
+			if (!req.query.state) return res.redirect(URL + '/profile?error=noUserId');
 			await twitterCallback({
 				code: req.query.code as string,
 				userId: req.query.state as string,
 			});
-			return res.redirect('http://localhost:3000/profile');
+			return res.redirect(URL + '/profile');
 		} catch (e: any) {
 			const isMessageExists = Object.prototype.hasOwnProperty.call(e, 'message');
 			const message = isMessageExists ? e.message : 'Error while confirming transaction';
-			return res.redirect(`http://localhost:3000/profile?error=${message}`);
+			return res.redirect(URL + `/profile?error=${message}`);
 		}
 	});
 };
