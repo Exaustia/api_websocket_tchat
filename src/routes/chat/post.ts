@@ -1,9 +1,9 @@
 import * as express from 'express';
-import { authentification } from '../../loaders/authentification';
+import { authentificationModerator } from '../../loaders/authentification';
 import { removeMessage } from '../../services/chat/removeMessage';
 
 export default async ({ app }: { app: express.Application }) => {
-	app.post('/chat/remove_message', authentification, async (req, res) => {
+	app.post('/chat/remove_message', authentificationModerator, async (req, res) => {
 		try {
 			const { id } = req.body;
 			if (!req.isModerator) {

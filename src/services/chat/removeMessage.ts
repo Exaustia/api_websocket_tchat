@@ -46,10 +46,8 @@ export const removeMessage = async (messageId: string) => {
 			} catch (err: any) {
 				if (err.statusCode === 410) {
 					console.log('La connexion est inactive ou a expiré.');
-					throw new Error('La connexion est inactive ou a expiré.');
 				} else {
 					console.error("Erreur lors de l'envoi de la requête:", err);
-					throw new Error("Erreur lors de l'envoi de la requête:");
 				}
 			}
 		});
