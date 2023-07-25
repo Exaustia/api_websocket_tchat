@@ -4,27 +4,10 @@ import { bufferToHex } from 'ethereumjs-util';
 import { recoverPersonalSignature } from '@metamask/eth-sig-util';
 import { getRandomNonceMessage } from '../../utils/getRandomNonceMessage';
 import { errorLog } from '../../utils/errorLog';
-import prismaInstance from '../../utils/prisma';
 import { verifyJWT } from '../../loaders/authentification';
-import { User } from '@prisma/client';
+
 import { loginSolana } from '../../services/login/loginSolana';
-
-const colors = [
-	'#000000',
-	'#FFFFFF',
-	'#FF0000',
-	'#00FF00',
-	'#0000FF',
-	'#FFFF00',
-	'#00FFFF',
-	'#FF00FF',
-];
-
-const getRandomColor = () => {
-	return colors[Math.floor(Math.random() * colors.length)];
-};
-
-const prisma = prismaInstance();
+import { upsertUser } from '../../schema/User/upsert';
 
 export default async ({ app }: { app: express.Application }) => {
 	app.post('/login/eth', async (req, res) => {
@@ -34,27 +17,24 @@ export default async ({ app }: { app: express.Application }) => {
 		const signature = req.body.signature;
 		try {
 			const signerAddress = recoverPersonalSignature({
-				data: bufferToHex(Buffer.from(getRandomNonceMessage(address).toLocaleLowerCase(), 'utf8')),
+				data: bufferToHex(
+					Buffer.from(getRandomNonceMessage(address).toLocaleLowerCase(), 'utf8'),
+				),
 				signature: signature,
 			});
 
 			if (address !== signerAddress.toLowerCase())
 				return res.status(401).send({ message: 'Invalid Signature' });
 
-			const user = await prisma.user.upsert({
-				where: {
-					ethWallet: address,
-				},
-				update: {},
-				create: {
-					ethWallet: address,
-					username: address,
-					color: getRandomColor(),
-				},
-			});
+			const user = await upsertUser(address, 'eth');
 
 			const token = jwt.sign(
-				{ wallet: address, provider: 'eth', userId: user.id, username: user.username },
+				{
+					wallet: address,
+					provider: 'eth',
+					userId: user.id,
+					username: user.username,
+				},
 				process.env.SECRET_JWT || '123456789',
 				{
 					expiresIn: 86400,

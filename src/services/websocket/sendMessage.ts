@@ -34,9 +34,9 @@ export const sendMessage = async ({ connectionId, roomId, message }: sendMessage
 				sessions: {
 					where: {
 						disconnectedAt: null,
-						NOT: {
-							websocketId: connectionId,
-						},
+						// NOT: {
+						// 	websocketId: connectionId,
+						// },
 					},
 				},
 			},
@@ -46,7 +46,7 @@ export const sendMessage = async ({ connectionId, roomId, message }: sendMessage
 			throw new Error('Room not found');
 		}
 
-		await prisma.message.create({
+		const prismaMessage = await prisma.message.create({
 			data: {
 				content: message,
 				user: {
@@ -71,9 +71,10 @@ export const sendMessage = async ({ connectionId, roomId, message }: sendMessage
 						Data: Buffer.from(
 							JSON.stringify({
 								message: message,
+								id: prismaMessage.id,
 								action: 'publicMessage',
 								username: userWhoSendTheMessage.user.username,
-								from: 'client',
+								from: 'user',
 								provider: 'eth',
 								isSub: false,
 								usernameColor: userWhoSendTheMessage?.user?.color,

@@ -58,6 +58,7 @@ export const authentification = (req: Request, res: Response, next: NextFunction
 		if (decodedToken && decodedToken.exp && decodedToken.exp > Date.now() / 1000) {
 			// Le token est valide et n'a pas expiré
 			req.userId = decodedToken.userId;
+			req.isModerator = decodedToken.isModerator;
 			next();
 		} else {
 			// Le token est invalide ou a expiré

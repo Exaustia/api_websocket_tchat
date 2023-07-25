@@ -9,3 +9,20 @@ export const getRoomByName = (name: string) => {
 		},
 	});
 };
+
+export const getUsersConnectedToTheRoom = async (roomId: string) => {
+	const usersConnectedToTheRoom = prisma.room.findUnique({
+		where: {
+			id: roomId,
+		},
+		include: {
+			sessions: {
+				where: {
+					disconnectedAt: null,
+				},
+			},
+		},
+	});
+
+	return usersConnectedToTheRoom;
+};

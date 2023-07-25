@@ -10,26 +10,31 @@ generator client {
 }
 
 model User {
-  id              String            @id @unique @default(uuid())
-  username        String            @unique
-  solanaWallet    String?           @unique @db.VarChar(256)
-  ethWallet       String?           @unique @db.VarChar(256)
-  picture         String?           @db.VarChar(256)
-  discordName     String?           @unique
-  description     String?           @db.VarChar(256)
-  discordId       String?           @unique
-  twitterName     String?           @unique
-  twitterId       String?           @unique
-  color           String            @default("#000000")
+  id              String    @id @unique @default(uuid())
+  username        String    @unique
+  solanaWallet    String?   @unique @db.VarChar(256)
+  ethWallet       String?   @unique @db.VarChar(256)
+  picture         String?   @db.VarChar(256)
+  discordName     String?   @unique
+  description     String?   @db.VarChar(256)
+  discordId       String?   @unique
+  twitterName     String?   @unique
+  twitterId       String?   @unique
+  color           String    @default("#000000")
   defaultIcon     String?
-  defaultProvider String?           @default("eth")
-  messages        Message[]
-  sessions        UserSession[]
-  subscriptions   Subscription[]
-  restrictions    RoomRestriction[] // Ajout des restrictions de room
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @default(now()) @updatedAt
-  lastLogin       DateTime?
+  defaultProvider String?   @default("eth")
+  isModerator     Boolean   @default(false)
+  isBanned        Boolean   @default(false)
+  isMuted         Boolean   @default(false)
+  mutedUntil      DateTime?
+  bannedUntil     DateTime?
+  messages      Message[]
+  sessions      UserSession[]
+  subscriptions Subscription[]
+  restrictions  RoomRestriction[] // Ajout des restrictions de room
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @default(now()) @updatedAt
+  lastLogin     DateTime?
 }
 
 model Room {
@@ -45,13 +50,14 @@ model Room {
 }
 
 model Message {
-  id        String   @id @unique @default(uuid())
-  content   String   @db.VarChar(256)
-  createdAt DateTime @default(now())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  roomId    String
-  room      Room     @relation(fields: [roomId], references: [id])
+  id          String   @id @unique @default(uuid())
+  content     String   @db.VarChar(256)
+  createdAt   DateTime @default(now())
+  isModerated Boolean  @default(false)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  roomId      String
+  room        Room     @relation(fields: [roomId], references: [id])
 }
 
 model UserSession {

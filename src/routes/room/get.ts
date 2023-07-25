@@ -21,6 +21,7 @@ export default async ({ app }: { app: express.Application }) => {
 					room: {
 						id: id,
 					},
+					isModerated: false,
 				},
 				take: 10,
 				orderBy: {
@@ -38,6 +39,7 @@ export default async ({ app }: { app: express.Application }) => {
 					createdAt: message.createdAt,
 					from: 'user',
 					provider: 'eth',
+					id: message.id,
 					usernameColor: message.user.color,
 					isSub: false,
 				};

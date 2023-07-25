@@ -15,12 +15,17 @@ export const loginSolana = async ({
 		const resultVerify = verifySignature({ signedMessage: signedMessage, publicKey: publicKey });
 		if (resultVerify) {
 			// create user if not exist
-			const user = await upsertUser(publicKey);
+			const user = await upsertUser(publicKey, 'sol');
 			if (isNull(user)) {
 				throw new Error('User not found');
 			}
 			const token = jwt.sign(
-				{ wallet: publicKey, provider: 'SOL', userId: user.id, username: user.username },
+				{
+					wallet: publicKey,
+					provider: 'SOL',
+					userId: user.id,
+					username: user.username,
+				},
 				process.env.SECRET_JWT || '123456789',
 				{
 					expiresIn: 86400,

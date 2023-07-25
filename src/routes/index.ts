@@ -7,6 +7,7 @@ import user from './user';
 import room from './room';
 import ws from './ws';
 import callback from './callback';
+import chat from './chat';
 
 export default async ({ app }: { app: express.Express }) => {
 	app.get('/', (_, res) => {
@@ -19,6 +20,7 @@ export default async ({ app }: { app: express.Express }) => {
 	await room({ app });
 	await ws({ app });
 	await callback({ app });
+	await chat({ app });
 
 	console.log('Express routes Intialized');
 };
