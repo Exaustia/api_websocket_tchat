@@ -12,9 +12,9 @@ export default async ({ app }: { app: express.Application }) => {
 			if (!id) {
 				return res.status(400).send({ message: 'Missing parameters' });
 			}
-			const { success } = await removeMessage(id);
-			if (success) return res.status(200).send({ success: true });
-			return res.status(400).send({ message: 'An error occured' });
+			removeMessage(id);
+
+			return res.status(200).send({ success: true });
 		} catch (e: any) {
 			console.error(e);
 			res.status(200).send({ message: 'error' });

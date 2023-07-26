@@ -38,7 +38,7 @@ export default async ({ app }: { app: express.Application }) => {
 					content: message.content,
 					createdAt: message.createdAt,
 					from: 'user',
-					provider: 'eth',
+					provider: message.user.defaultProvider,
 					id: message.id,
 					usernameColor: message.user.color,
 					isSub: false,

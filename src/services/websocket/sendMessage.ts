@@ -75,7 +75,7 @@ export const sendMessage = async ({ connectionId, roomId, message }: sendMessage
 								action: 'publicMessage',
 								username: userWhoSendTheMessage.user.username,
 								from: 'user',
-								provider: 'eth',
+								provider: userWhoSendTheMessage.user.defaultProvider,
 								isSub: false,
 								usernameColor: userWhoSendTheMessage?.user?.color,
 							}),
