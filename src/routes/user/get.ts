@@ -19,7 +19,7 @@ export default async ({ app }: { app: express.Application }) => {
 		}
 	});
 
-	app.get('/user/profile/:username', authentification, async (req, res) => {
+	app.get('/user/profile/:username', async (req, res) => {
 		try {
 			const user = await getUserByUsername(req.params.username);
 			res.status(200).json(user);
