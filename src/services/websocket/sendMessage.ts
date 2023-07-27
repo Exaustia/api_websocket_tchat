@@ -72,6 +72,7 @@ export const sendMessage = async ({ connectionId, roomId, message }: sendMessage
 							JSON.stringify({
 								message: message,
 								id: prismaMessage.id,
+								userId: userWhoSendTheMessage.user.id,
 								action: 'publicMessage',
 								username: userWhoSendTheMessage.user.username,
 								from: 'user',

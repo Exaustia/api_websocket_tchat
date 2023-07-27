@@ -22,6 +22,9 @@ export default async ({ app }: { app: express.Application }) => {
 						id: id,
 					},
 					isModerated: false,
+					user: {
+						isBanned: false,
+					},
 				},
 				take: 10,
 				orderBy: {
@@ -42,6 +45,7 @@ export default async ({ app }: { app: express.Application }) => {
 					id: message.id,
 					usernameColor: message.user.color,
 					isSub: false,
+					userId: message.user.id,
 				};
 			});
 
