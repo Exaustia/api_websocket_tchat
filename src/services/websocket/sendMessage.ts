@@ -26,6 +26,10 @@ export const sendMessage = async ({ connectionId, roomId, message }: sendMessage
 			throw new Error('User not found');
 		}
 
+		if (!userWhoSendTheMessage.user.isBanned) {
+			throw new Error('User is banned');
+		}
+
 		const usersConnectedToTheRoom = await prisma.room.findUnique({
 			where: {
 				id: roomId,
