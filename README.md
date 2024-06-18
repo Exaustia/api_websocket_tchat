@@ -1,5 +1,3 @@
-# Staking web2
-
 ## Installation
 
 Install the API with npm or yarn
