@@ -10,7 +10,7 @@ export const encryPwd = '123456';
 // export const SOLANA_URL = 'https://api.devnet.solana.com';
 
 export const SOLANA_ENDPOINT =
-	process.env.ENDPOINT || 'https://rpc.helius.xyz/?api-key=e54b894e-da5a-4975-bedd-0c07f1ad9326';
+	process.env.ENDPOINT;
 
 export const SOL = '.0_default.solana.sol';
 
@@ -21,4 +21,4 @@ export const API = {
 };
 
 export const MATRICA_URL = 'https://api.matrica.io/v1';
-export const MATRICA_API_KEY = 'vJzl9dlfth6zK2ohfSSIY';
+export const MATRICA_API_KEY = '';
